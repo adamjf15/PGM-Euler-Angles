@@ -1,0 +1,27 @@
+
+# close after program returns non-zero exit status
+set -e
+
+# Install Anaconda or Miniconda
+
+# set up a python environment (pdb-tools is incuded in the environment.yml file)
+# conda env create --file ../environment.yml
+# source activate PGMEulerAngleEnv
+
+# make directory to write outputs to
+mkdir -p outs
+
+# Principal Axes Alignment
+python ../alignPrincipalAxes/alignPrincipalAxes.py --infile ./inputs/pdb2wf5.pdb \
+                                                   --select "protein and resid 16:87 and name CA" \
+                                                   --outfile ./outs/pdb2wf5_PAaligned.pdb
+
+# Euler Angle Calculation
+python ../getEulerAngles/getEulerAngles.py --queryStructures queryStructures \
+                                           --referenceFile ./outs/pdb2wf5_PAaligned.pdb \
+                                           --referenceChain A \
+                                           --domain1 16-87 \
+                                           --domain2 1-15,88-221 \
+                                           --atoms CA \
+                                           --outfile ./outs/eulerAngles
+

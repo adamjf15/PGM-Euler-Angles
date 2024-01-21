@@ -1,0 +1,17 @@
+#!/bin/bash
+
+mkdir -p outs
+
+# Principal Axes Alignment
+../alignPrincipalAxes/alignPrincipalAxes --infile ./inputs/pdb2wf5.pdb \
+                                         --select "protein and resid 16:87 and name CA" \
+                                         --outfile ./outs/pdb2wf5_PAaligned.pdb
+
+# Euler Angle Calculation
+../getEulerAngles/getEulerAngles --queryStructures queryStructures \
+                                 --referenceFile ./outs/pdb2wf5_PAaligned.pdb \
+                                 --referenceChain A \
+                                 --domain1 16-87 \
+                                 --domain2 1-15,88-221 \
+                                 --atoms CA \
+                                 --outfile ./outs/eulerAngles
